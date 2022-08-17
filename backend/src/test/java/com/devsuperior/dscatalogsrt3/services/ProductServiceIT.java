@@ -11,6 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dscatalogsrt3.dto.ProductDTO;
+import com.devsuperior.dscatalogsrt3.entities.Category;
+import com.devsuperior.dscatalogsrt3.repositories.CategoryRepository;
 import com.devsuperior.dscatalogsrt3.repositories.ProductRepository;
 import com.devsuperior.dscatalogsrt3.services.exceptions.ResourceNotFoundException;
 
@@ -23,6 +25,9 @@ public class ProductServiceIT {
 	
 	@Autowired
 	private ProductRepository repository;
+	
+	//@Autowired	
+	//private CategoryRepository categoryRepository;
 	
 	private Long existingId;
 	private Long nonExistingId;
@@ -56,7 +61,7 @@ public class ProductServiceIT {
 		
 		PageRequest pageRequest = PageRequest.of(0, 10);
 		
-		Page<ProductDTO> result = service.findAllPaged(pageRequest);
+		Page<ProductDTO> result = service.findAllPaged(0, pageRequest);
 		
 		Assertions.assertFalse(result.isEmpty());
 		Assertions.assertEquals(0, result.getNumber());
