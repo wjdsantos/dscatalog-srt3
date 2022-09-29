@@ -33,27 +33,27 @@ const Catalog = () => {
       </div>
       <div className="row">
         <div className="col-sm-6 col-md-4 col-lg-3 col-el-2">
-          <Link to="products/1">
+          <Link to="/products/1">
             <ProductCard product={product} />
           </Link>
         </div>
         <div className="col-sm-6 col-md-4 col-lg-3 col-el-2">
-          <Link to="products/1">
+          <Link to="/products/1">
             <ProductCard product={product} />
           </Link>
         </div>
         <div className="col-sm-6 col-md-4 col-lg-3 col-el-2">
-          <Link to="products/1">
+          <Link to="/products/1">
             <ProductCard product={product} />
           </Link>
         </div>
         <div className="col-sm-6 col-md-4 col-lg-3 col-el-2">
-          <Link to="products/1">
+          <Link to="/products/1">
             <ProductCard product={product} />
           </Link>
         </div>
         <div className="col-sm-6 col-md-4 col-lg-3 col-el-2">
-          <Link to="products/1">
+          <Link to="/products/1">
             <ProductCard product={product} />
           </Link>
         </div>
