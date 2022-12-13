@@ -1,11 +1,19 @@
 import { AxiosRequestConfig } from "axios";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { Product } from "types/product";
 import { requestBackend } from "util/requests";
 import "./styles.css";
 
+type UrlParams = {
+  productId: string;
+};
+
 const Form = () => {
+  const { productId } = useParams<UrlParams>();
+
+  const isEditing = productId !== "create";
 
   const history = useHistory();
 
@@ -13,18 +21,35 @@ const Form = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<Product>();
 
-  const onSubmit = (formData: Product) => {
+  useEffect(() => {
+    if (isEditing) {
+      requestBackend({ url: `/products/${productId}` }).then((response) => {
+        const product = response.data as Product;
 
-    const data = { ...formData, 
-      imgUrl: "https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/2-big.jpg",
-      categories: [ {id: 1, name: ""} ],
+        setValue("name", product.name);
+        setValue("price", product.price);
+        setValue("description", product.description);
+        setValue("imgUrl", product.imgUrl);
+        setValue("categories", product.categories);
+      });
+    }
+  }, []);
+
+  const onSubmit = (formData: Product) => {
+    const data = {
+      ...formData,
+      imgUrl: isEditing
+        ? formData.imgUrl
+        : "https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/2-big.jpg",
+      categories: isEditing ? formData.categories : [{ id: 1, name: "" }],
     };
 
     const config: AxiosRequestConfig = {
-      method: "POST",
-      url: "/products",
+      method: isEditing ? "PUT" : "POST",
+      url: isEditing ? `/products/${productId}` : "/products",
       data,
       withCredentials: true,
     };
@@ -36,7 +61,7 @@ const Form = () => {
 
   const handleCancel = () => {
     history.push("/admin/products");
-  }
+  };
 
   return (
     <div className="product-crud-container">
@@ -61,7 +86,7 @@ const Form = () => {
                   {errors.name?.message}
                 </div>
               </div>
-              
+
               <div className="margin-botton-30">
                 <input
                   {...register("price", {
@@ -100,9 +125,9 @@ const Form = () => {
             </div>
           </div>
           <div className="product-crud-buttons-container">
-            <button 
-            className="btn btn-outline-danger product-crud-button"
-            onClick={handleCancel}
+            <button
+              className="btn btn-outline-danger product-crud-button"
+              onClick={handleCancel}
             >
               CANCELAR
             </button>
